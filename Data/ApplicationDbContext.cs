@@ -24,7 +24,7 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Tarea>(tarea =>
         {
-            tarea.ToTable("Tarea");
+            tarea.ToTable("Tareas");
             tarea.HasKey(t => t.Id);
             tarea.HasOne(t => t.Categoria)
                 .WithMany(t => t.Tareas)
