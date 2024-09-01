@@ -79,4 +79,19 @@ app.MapPost("/api/v1/tareas", async (ApplicationDbContext dbContext, [FromBody] 
     return Results.Created();
 });
 
+app.MapPut("/api/v1/tareas/{id}", async (ApplicationDbContext dbContext, [FromRoute] int id, [FromBody] Tarea tarea) =>
+{
+    var tareaDb = await dbContext.Tareas.FindAsync(id);
+    if (tareaDb == null)
+    {
+        return Results.NotFound();
+    }
+    tareaDb.Titulo = tarea.Titulo;
+    tareaDb.Descripcion = tarea.Descripcion;
+    tareaDb.Prioridad = tarea.Prioridad;
+    tareaDb.Estado = tarea.Estado;
+    await dbContext.SaveChangesAsync();
+    return Results.NoContent();
+});
+
 app.Run();
