@@ -59,4 +59,12 @@ app.MapGet("/initialize-db", async (ApplicationDbContext dbContext) =>
     }
 });
 
+app.MapGet("/api/v1/tareas", async (ApplicationDbContext dbContext) =>{
+    return Results.Ok(dbContext.Tareas);
+});
+
+app.MapGet("/api/v2/tareas", async (ApplicationDbContext dbContext) =>{
+    return Results.Ok(dbContext.Tareas.Include(t=>t.Categoria));
+});
+
 app.Run();

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace CRUD_FluentAPI_.NET.Models;
 public class Categoria
 {
@@ -7,6 +9,7 @@ public class Categoria
     public int Peso { get; set; }
     
     // conexiones foraneas
+    [JsonIgnore]
     public virtual ICollection<Tarea> Tareas { get; set; }
 
 }
