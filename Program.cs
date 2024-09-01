@@ -94,4 +94,16 @@ app.MapPut("/api/v1/tareas/{id}", async (ApplicationDbContext dbContext, [FromRo
     return Results.NoContent();
 });
 
+app.MapDelete("/api/v1/tareas/{id}", async (ApplicationDbContext dbContext, [FromRoute] int id) =>
+{
+    var tareaDb = await dbContext.Tareas.FindAsync(id);
+    if (tareaDb == null)
+    {
+        return Results.NotFound();
+    }
+    dbContext.Tareas.Remove(tareaDb);
+    await dbContext.SaveChangesAsync();
+    return Results.NoContent();
+});
+
 app.Run();
