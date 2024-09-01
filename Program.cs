@@ -1,5 +1,7 @@
 using CRUD_FluentAPI_.NET.Data;
+using CRUD_FluentAPI_.NET.Models;
 using DotNetEnv;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,12 +61,22 @@ app.MapGet("/initialize-db", async (ApplicationDbContext dbContext) =>
     }
 });
 
-app.MapGet("/api/v1/tareas", async (ApplicationDbContext dbContext) =>{
+app.MapGet("/api/v1/tareas", async (ApplicationDbContext dbContext) =>
+{
     return Results.Ok(dbContext.Tareas);
 });
 
-app.MapGet("/api/v2/tareas", async (ApplicationDbContext dbContext) =>{
-    return Results.Ok(dbContext.Tareas.Include(t=>t.Categoria));
+app.MapGet("/api/v2/tareas", async (ApplicationDbContext dbContext) =>
+{
+    return Results.Ok(dbContext.Tareas.Include(t => t.Categoria));
+});
+
+app.MapPost("/api/v1/tareas", async (ApplicationDbContext dbContext, [FromBody] Tarea tarea) =>
+{
+    tarea.FechaCreacion = DateTime.Now;
+    await dbContext.Tareas.AddAsync(tarea);
+    await dbContext.SaveChangesAsync();
+    return Results.Created();
 });
 
 app.Run();
